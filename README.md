@@ -1,18 +1,22 @@
 Agent Station
 =============
 The Agent Station project provides a modern environment for static and mobile software agents. Also, provides a client api that allows you to create your own agents. In simple terms, a software agent carries out tasks on behalf of a user. In order to carry out its tasks, an agent can collaborate with other local agents or migrate to a remote Agent Station. See [TERMS.md](TERMS.md) for the terminology used. Agent Station is based on the engineering research I did between 1998-2003. This research led to my PhD in 2003 from the University of Surrey, UK.
-[Project Site](connectina.co.uk/agent-station) | [Dr Christos Bohoris](connectina.co.uk/about) | [PhD Thesis](https://www.connectina.co.uk/doc/cbohoris-phdthesis-unis-2003.pdf)
+ [Dr Christos Bohoris](connectina.co.uk/about) | [PhD Thesis](https://www.connectina.co.uk/doc/cbohoris-phdthesis-unis-2003.pdf)
+
+Visit the [Project Site](connectina.co.uk/agent-station) to download the latest, stable release packages.
 
 ---
 
 ## Features
 - Supports both mobile and static software agents
-- Supports collaboration between agents with messages exchanged in JSON format
-- Offers two user interface alternatives, a GUI or an interactive TUI
-- Based on secure gRPC (HTTP/2 using SSL, TLS) or plain Java-RMI (JRMP) remote communications
+- Based on secure [gRPC](https://grpc.io/) (over HTTP/2 with SSL, TLS) or plain Java-RMI (JRMP) remote communications
+- Supports collaboration between agents with messages in JSON format
+- Schedule an agent to carry out a task (once or repeatedly)
+- Permission-based mobile agent migration to remote Agent Stations
+- Specified permissions determine whether an agent is allowed in the environment
 - Jar files containing agents are verified against known MD5 hash code
-- Specified permissions determine whether an agent is allowed
-- Runs on any OS supporting Java 17
+- Offers two user interface alternatives, a GUI or an interactive TUI
+- Runs on any OS supporting Java 17 LTS
 - For a detailed list of features see [REQS.md](REQS.md)
 
 <img src="https://www.connectina.co.uk/agentstation/agent-station-main-frame.png" alt="Agent Station Main Frame" /> 
