@@ -1,0 +1,314 @@
+/* Agent Station environment for static and mobile software agents
+ * Copyright (C) 2022  Dr Christos Bohoris
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * connectina.co.uk/agent-station
+ */
+package uk.co.connectina.agentstation.desktop;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import uk.co.connectina.agentstation.api.Instance;
+import uk.co.connectina.agentstation.local.Schedule;
+
+/**
+ * A dialog that allows a user to make changes to an agent.
+ *
+ * @author Dr Christos Bohoris
+ */
+public class ChangeAgentDialog extends javax.swing.JDialog {
+
+    public static final String ERROR_TITLE = "Error";
+    public static final String USER_HOME = "user.home";
+    private SchedulePanel schedulePanel;
+    private String[] parameters = null;
+    
+    /**
+     * Creates new form ChangeAgentDialog
+     */
+    public ChangeAgentDialog(java.awt.Frame parent, boolean modal, Instance initialInstance, Schedule schedule) {
+        super(parent, modal);
+        setTitle("Change Agent");
+        initComponents();
+        okButton.addActionListener(new OkListener());
+        cancelButton.addActionListener(new CancelListener());
+      
+        if (initialInstance != null) {
+            nameTextField.setText(initialInstance.getIdentity().getName());
+            orgTextField.setText(initialInstance.getIdentity().getOrganisation());
+            majorSpinner.setValue(initialInstance.getIdentity().getMajorVersion());
+            minorSpinner.setValue(initialInstance.getIdentity().getMinorVersion());
+            paramTextField.setText(initialInstance.getCommaSeparatedParameters());
+        }
+
+        getRootPane().setDefaultButton(okButton);
+        okButton.revalidate();
+        int height = new JTextField().getPreferredSize().height;
+        Dimension longDimension = new Dimension(280, height);
+        nameTextField.setPreferredSize(longDimension);
+        orgTextField.setPreferredSize(longDimension);
+        majorSpinner.setPreferredSize(new Dimension(100, height));
+        minorSpinner.setPreferredSize(new Dimension(100, height));
+        majorSpinner.setMaximumSize(new Dimension(100, height));
+        minorSpinner.setMaximumSize(new Dimension(100, height));
+        paramTextField.setPreferredSize(longDimension);
+        
+        schedulePanel = new SchedulePanel();
+        scheduleTabPanel.add(schedulePanel, BorderLayout.CENTER);
+        schedulePanel.setSchedule(schedule);
+
+        paramTextField.requestFocus();
+
+        pack();
+        setLocationRelativeTo(parent);
+    }
+    
+    public void display() {
+        setVisible(true);
+    }
+    
+    public String[] getParameters() {
+        
+        return parameters;
+    }
+    
+    public Schedule getSchedule() {
+        
+        return schedulePanel.getSchedule();
+    }
+
+    public class OkListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            String param = paramTextField.getText().trim();
+
+            String[] paramOutput = null;
+            if (!param.isBlank()) {
+                String[] params = param.split(",");
+                paramOutput = new String[params.length];
+                int index = 0;
+                for (String p : params) {
+                    paramOutput[index++] = p.trim();
+                }
+            }
+
+            parameters = paramOutput;
+            
+            Schedule schedule = getSchedule();
+            if (schedule != null && schedule.getStartDateTime().isBefore(LocalDateTime.now())) {
+                JOptionPane.showMessageDialog(getParent(), "Start date time must be in the future.", ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+                
+                return;
+            }
+
+            setVisible(false);
+            dispose();
+        }
+
+    }
+
+    public class CancelListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            setVisible(false);
+            dispose();
+        }
+
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        javax.swing.JPanel mainPanel = new javax.swing.JPanel();
+        javax.swing.JTabbedPane mainTabbedPane = new javax.swing.JTabbedPane();
+        javax.swing.JPanel inputPanel = new javax.swing.JPanel();
+        javax.swing.JLabel nameLabel = new javax.swing.JLabel();
+        nameTextField = new javax.swing.JTextField();
+        javax.swing.JLabel orgLabel = new javax.swing.JLabel();
+        orgTextField = new javax.swing.JTextField();
+        javax.swing.JLabel majorLabel = new javax.swing.JLabel();
+        majorSpinner = new javax.swing.JSpinner();
+        javax.swing.JLabel minorLabel = new javax.swing.JLabel();
+        minorSpinner = new javax.swing.JSpinner();
+        javax.swing.JLabel paramLabel = new javax.swing.JLabel();
+        paramTextField = new javax.swing.JTextField();
+        javax.swing.JPanel locPanel = new javax.swing.JPanel();
+        javax.swing.JLabel positionLabel = new javax.swing.JLabel();
+        scheduleTabPanel = new javax.swing.JPanel();
+        javax.swing.JPanel controlPanel = new javax.swing.JPanel();
+        okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        mainPanel.setLayout(new java.awt.BorderLayout());
+
+        inputPanel.setLayout(new java.awt.GridBagLayout());
+
+        nameLabel.setLabelFor(nameTextField);
+        nameLabel.setText("Agent Name:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 11, 5);
+        inputPanel.add(nameLabel, gridBagConstraints);
+
+        nameTextField.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(12, 0, 11, 11);
+        inputPanel.add(nameTextField, gridBagConstraints);
+
+        orgLabel.setLabelFor(orgTextField);
+        orgLabel.setText("Organisation:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 11, 11, 5);
+        inputPanel.add(orgLabel, gridBagConstraints);
+
+        orgTextField.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 11, 11);
+        inputPanel.add(orgTextField, gridBagConstraints);
+
+        majorLabel.setLabelFor(majorSpinner);
+        majorLabel.setText("Major Version:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 12, 11, 5);
+        inputPanel.add(majorLabel, gridBagConstraints);
+
+        majorSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 0, null, 1));
+        majorSpinner.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 11, 0);
+        inputPanel.add(majorSpinner, gridBagConstraints);
+
+        minorLabel.setLabelFor(minorSpinner);
+        minorLabel.setText("Minor Version:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 11, 11, 5);
+        inputPanel.add(minorLabel, gridBagConstraints);
+
+        minorSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        minorSpinner.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 11, 11);
+        inputPanel.add(minorSpinner, gridBagConstraints);
+
+        paramLabel.setLabelFor(paramTextField);
+        paramLabel.setText("Parameters:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 11, 11, 5);
+        inputPanel.add(paramLabel, gridBagConstraints);
+
+        paramTextField.setToolTipText("Comma-separated list of parameters");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 11, 11);
+        inputPanel.add(paramTextField, gridBagConstraints);
+
+        locPanel.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 11, 0);
+        inputPanel.add(locPanel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        inputPanel.add(positionLabel, gridBagConstraints);
+
+        mainTabbedPane.addTab("Input", inputPanel);
+
+        scheduleTabPanel.setLayout(new java.awt.BorderLayout());
+        mainTabbedPane.addTab("Schedule", scheduleTabPanel);
+
+        mainPanel.add(mainTabbedPane, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        controlPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 12, 11, 11));
+        controlPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        okButton.setText("OK");
+        controlPanel.add(okButton);
+
+        cancelButton.setText("Cancel");
+        controlPanel.add(cancelButton);
+
+        getContentPane().add(controlPanel, java.awt.BorderLayout.SOUTH);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JSpinner majorSpinner;
+    private javax.swing.JSpinner minorSpinner;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JButton okButton;
+    private javax.swing.JTextField orgTextField;
+    private javax.swing.JTextField paramTextField;
+    private javax.swing.JPanel scheduleTabPanel;
+    // End of variables declaration//GEN-END:variables
+
+}

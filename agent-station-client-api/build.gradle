@@ -1,0 +1,86 @@
+/* Agent Station environment for static and mobile software agents
+ * Copyright (C) 2022  Dr Christos Bohoris
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * connectina.co.uk/agent-station
+ */
+
+plugins {
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+    id 'signing'
+}
+
+ext.getBuildVersion = { ->
+    Process process = "git rev-list --count HEAD".execute([], project.rootDir)
+    def commitCount = process.getText().trim() 
+
+    project.version = project.app_version + "." + commitCount
+}
+
+signing {
+    sign configurations.archives
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar, javadocJar, sourcesJar
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+java {
+    getBuildVersion()
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.2'
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+jar {
+    getBuildVersion()
+    manifest {
+        attributes 'Specification-Title': 'Agent Station Client API'
+        attributes 'Specification-Version': project.version
+        attributes 'Specification-Vendor': 'Dr Christos Bohoris'
+        attributes 'Implementation-Title': 'uk.co.connectina.agentstation'
+        attributes 'Implementation-Version': project.version
+        attributes 'Implementation-Vendor': 'Dr Christos Bohoris'
+    }
+}

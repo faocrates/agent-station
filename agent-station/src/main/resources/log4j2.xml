@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="logPath">${sys:user.home}/.AgentStation/logs</Property>
+    </Properties>
+    <Appenders>
+        <!-- Console appender configuration. -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{HH:mm:ss.SSS} %highlight{[%-5level]} [%-6.-6t] %c{1}:%L %highlight{->} %m%n" />
+        </Console>
+        <!-- The RollingFile configuration rolls over the log every day, or when the log file size gets
+        greater than 10 MB. It also deletes all log files older than 30 days. -->
+        <RollingFile name="rollingFile"
+                     fileName="${logPath}/agentstation.log"
+                     filePattern="${logPath}/agentstation-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%-5level] [%-6.-6t] %c{1}:%L -> %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- Max 10 files will be created everyday -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${logPath}" maxDepth="10">
+                    <!-- Delete all files older than 30 days -->
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- Root logger referring to console appender -->
+        <Root level="info" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="rollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,67 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+    id 'signing'
+}
+
+ext.getBuildVersion = { ->
+    Process process = "git rev-list --count HEAD".execute([], project.rootDir)
+    def commitCount = process.getText().trim() 
+
+    project.version = project.app_version + "." + commitCount
+}
+
+signing {
+    sign configurations.archives
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar, sourcesJar
+}
+
+java {
+    getBuildVersion()
+    withSourcesJar()
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':agent-station-client-api')
+
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:31.0.1-jre'
+}
+
+application {
+
+}
+
+jar {
+    getBuildVersion()
+    manifest {
+        attributes 'Main-Class': 'uk.co.connectina.agentstation.App'
+        attributes 'Specification-Title': 'Agent Station Example Agents'
+        attributes 'Specification-Version': project.version
+        attributes 'Specification-Vendor': 'Dr Christos Bohoris'
+        attributes 'Implementation-Title': 'uk.co.connectina.agentstation'
+        attributes 'Implementation-Version': project.version
+        attributes 'Implementation-Vendor': 'Dr Christos Bohoris'
+    }
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}

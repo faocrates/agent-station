@@ -1,0 +1,60 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package uk.co.connectina.agentstation.api.grpc;
+
+message VoidType {
+
+}
+
+message IdentityType {
+  string name = 1;
+  string organisation = 2;
+  string className = 3;
+  string hashCode = 4;
+  string packageFile = 5;
+  int32 majorVersion = 6;
+  int32 minorVersion = 7;
+  string description = 8;
+}
+
+message InstanceType {
+  enum State {
+    ACTIVE = 0;
+    INACTIVE = 1;
+  }
+  IdentityType identity = 1;
+  string creation = 2;
+  string placeName = 3;
+  State state = 4;
+  repeated string parameters = 5;
+}
+
+message PermissionType {
+  string agentName = 1;
+  string agentTraceId = 2;
+  string placeName = 3;
+  bool allowed = 4;
+  bool autoStart = 5;
+}
+
+message PermissionInput {
+  string agentName = 1;
+  string agentTraceId = 2;
+  string placeName = 3;
+}
+
+message AgentTransferInput {
+  InstanceType instance = 1;
+  bytes agentBytes = 2;
+  string packageName = 3;
+  string placeName = 4;
+  bytes packageData = 5;
+}
+
+service RemoteRegistry {
+  rpc lookupPermission(PermissionInput) returns (PermissionType);
+}
+
+service RemoteStation {
+  rpc transferAgent(AgentTransferInput) returns (VoidType);
+}
