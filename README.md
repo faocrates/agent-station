@@ -1,9 +1,9 @@
 Agent Station
 =============
 The Agent Station project provides a modern environment for static and mobile software agents. Also, provides a client api that allows you to create your own agents. In simple terms, a software agent carries out tasks on behalf of a user. In order to carry out its tasks, an agent can collaborate with other local agents or migrate to a remote Agent Station. See [TERMS.md](TERMS.md) for the terminology used. Agent Station is based on the engineering research I did between 1998-2003. This research led to my PhD in 2003 from the University of Surrey, UK.
- [Dr Christos Bohoris](connectina.co.uk/about) | [PhD Thesis](https://www.connectina.co.uk/doc/cbohoris-phdthesis-unis-2003.pdf)
+ [Dr Christos Bohoris](https://www.connectina.co.uk/about) | [PhD Thesis](https://www.connectina.co.uk/doc/cbohoris-phdthesis-unis-2003.pdf)
 
-Visit the [Project Site](connectina.co.uk/agent-station) to download the latest, stable release packages.
+Visit the [Project Site](https://www.connectina.co.uk/agent-station) to download the latest, stable release packages.
 
 ---
 
