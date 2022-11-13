@@ -11,6 +11,7 @@ The Agent Station project provides a modern environment for static and mobile so
 - Offers two user interface alternatives, a GUI or an interactive TUI
 - Based on secure gRPC (HTTP/2 using SSL, TLS) or plain Java-RMI (JRMP) remote communications
 - Jar files containing agents are verified against known MD5 hash code
+- Specified permissions determine whether an agent is allowed
 - Runs on any OS supporting Java 17
 - For a detailed list of features see [REQS.md](REQS.md)
 

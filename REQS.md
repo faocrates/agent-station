@@ -131,4 +131,4 @@ placeName=Default
 allowed=true
 autoStart=false
 ```
--15.12: A jar package file containing an agent is removed from `~/.AgentStation/packages` when there are no running Agent instances from it in the agent station. This relates to the cases of Agent removal and migration.
+- 15.12: A jar package file containing an agent is removed from `~/.AgentStation/packages` when there are no running Agent instances from it in the agent station. This relates to the cases of Agent removal and migration.
