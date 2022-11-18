@@ -67,7 +67,7 @@ When starting with Agent Station it is recommended to try out the agent examples
 ### Importing
 - You can import an agent using the starter property files located in `library/AgentPropertyFiles`
 - Open a property file and modify `packageLocation` to correspond to the location of the agent examples jar
-- Modify any agent `parameters` to your needs. For the DiskInfo and AptUpdate agents the values should correspond to the ORIGIN-IP-ADDRESS,ORIGIN-PORT,DESTINATION-IP-ADDRESS,DESTINATION-PORT, e.g. `parameters=192.168.0.18,1099,192.168.0.29,1099`
+- Modify any agent `parameters` to your needs. For the DiskInfo and AptUpdate agents the values should correspond to the DESTINATION-IP-ADDRESS,DESTINATION-PORT, e.g. `parameters=192.168.0.29,1099`
 - The hash code corresponds to the MD5 hash code for the jar. e.g. It is the code returned when running the following command on Linux: `md5sum agent-station-example-agents-{version}.jar`
 - Once you have finished modifying the property files, on Linux run: `./copy-props.sh`. This copies the property files to the default folder, `~/.AgentStation/properties`
 
